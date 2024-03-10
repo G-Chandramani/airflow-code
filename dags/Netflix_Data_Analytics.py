@@ -65,3 +65,4 @@ start_task = DummyOperator(task_id='start_task', dag=dag)
 end_task = DummyOperator(task_id='end_task', dag=dag)
 
 start_task >> credits_sensor >> titles_sensor >> load_data_snowflake  >> run_stage_model >> end_task
+#final check
