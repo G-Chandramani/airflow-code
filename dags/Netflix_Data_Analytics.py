@@ -11,10 +11,6 @@ import sys
 sys.path.append('/home/airflow/airflow-code/dags')
 from source_load.data_load import run_script
 
-
-
-
-
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
