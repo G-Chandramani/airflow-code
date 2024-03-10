@@ -26,7 +26,7 @@ dag = DAG(
     dag_id='Netflix_Data_Analytics',
     default_args=default_args,
     description='This dag runs data analytics on top of netflix datasets',
-    schedule_interval=timedelta(minutes=20),
+    schedule_interval=timedelta(days==1),
 )
 
 credits_sensor = S3KeySensor(
