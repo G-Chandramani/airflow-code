@@ -63,8 +63,15 @@ run_stage_model = BashOperator(
     dag=dag
 )
 
+run_fact_dim_models = BashOperator(
+        task_id='run_fact_dim_models',
+  #  bash_command='/usr/local/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/dbt-code/.dbt/ --profile Netflix --target prod',
+     bash_command='echo "Activating virtual environment" && source /home/airflow/dbt-env/bin/activate && echo "Running dbt command" && /home/airflow/dbt-env/bin/dbt run --model tag:"FACT" --project-dir /home/airflow --profile Netflix --target prod',
+    dag=dag
+)
+
 start_task = DummyOperator(task_id='start_task', dag=dag)
 end_task = DummyOperator(task_id='end_task', dag=dag)
 
-start_task >> credits_sensor >> titles_sensor >> load_data_snowflake  >> run_stage_model >> end_task
+start_task >> credits_sensor >> titles_sensor >> load_data_snowflake  >> run_stage_model >> run_fact_dim_models >> end_task
 #final check
