@@ -8,7 +8,7 @@ from airflow.operators.dummy import DummyOperator
 ##In our use case the script to load data into snowflake is located in a subfolder inside the dags folder
 
 import sys
-sys.path.append('/home/airflow/airflow-code-demo/dags')
+sys.path.append('/home/airflow/airflow-code/dags')
 from source_load.data_load import run_script
 from alerting.slack_alert import task_success_slack_alert
 import boto3
@@ -69,19 +69,19 @@ load_data_snowflake = PythonOperator(task_id='Load_Data_Snowflake'
 	
 run_stage_models = BashOperator(
     task_id='run_stage_models',
-    bash_command='/usr/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target dev',
+    bash_command='/usr/local/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/.dbt/ --profile Netflix --target dev',
     dag=dag
 )
 
 run_fact_dim_models = BashOperator(
     task_id='run_fact_dim_models',
-    bash_command='/usr/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
+    bash_command='/usr/local/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
     dag=dag
 )
 
 run_test_cases = BashOperator(
     task_id='run_test_cases',
-    bash_command='/usr/bin/dbt test --model tag:"TEST" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
+    bash_command='/usr/local/bin/dbt run --model tag:"TEST" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
     dag=dag
 )
 
