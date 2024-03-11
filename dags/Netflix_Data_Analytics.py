@@ -69,25 +69,25 @@ load_data_snowflake = PythonOperator(task_id='Load_Data_Snowflake'
 	
 run_stage_models = BashOperator(
     task_id='run_stage_models',
-    bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profile Netflix --target dev',
+    bash_command='/usr/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target dev',
     dag=dag
 )
 
 run_fact_dim_models = BashOperator(
     task_id='run_fact_dim_models',
-    bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code --profile Netflix --target prod',
+    bash_command='/usr/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
     dag=dag
 )
 
 run_test_cases = BashOperator(
     task_id='run_test_cases',
-    bash_command='/home/airflow/dbt-env/bin/dbt test --model tag:"TEST" --project-dir /home/airflow/dbt-code --profile Netflix --target prod',
+    bash_command='/usr/bin/dbt test --model tag:"TEST" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
     dag=dag
 )
 
-slack_success_alert=task_success_slack_alert(dag=dag)
+#slack_success_alert=task_success_slack_alert(dag=dag)
 
 start_task = DummyOperator(task_id='start_task', dag=dag)
 end_task = DummyOperator(task_id='end_task', dag=dag)
 
-start_task >> credits_sensor >> titles_sensor >> load_data_snowflake >> run_stage_models>> run_fact_dim_models >> run_test_cases >>  slack_success_alert >>end_task
+start_task >> credits_sensor >> titles_sensor >> load_data_snowflake >> run_stage_models>> run_fact_dim_models >> run_test_cases >> end_task
