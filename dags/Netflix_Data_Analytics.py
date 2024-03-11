@@ -59,7 +59,7 @@ run_stage_model = BashOperator(
     task_id='run_staging_models',
   #  bash_command='source /home/airflow/dbt-env/bin/activate && /home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profile Netflix --target dev',
    # bash_command='source /home/airflow/dbt-env/bin/activate && /home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profile Netflix --target dev >> /home/airflow/dbt_run.log 2>&1',
-    bash_command='echo "Activating virtual environment" && source /home/airflow/dbt-env/bin/activate && echo "Running dbt command" && /home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code/ --profile Netflix --target dev',
+    bash_command='echo "Activating virtual environment" && source /home/airflow/dbt-env/bin/activate && echo "Running dbt command" && /home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow --profile Netflix --target dev',
     dag=dag
 )
 
