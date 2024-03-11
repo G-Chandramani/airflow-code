@@ -70,8 +70,14 @@ run_fact_dim_models = BashOperator(
     dag=dag
 )
 
+run_test_cases = BashOperator(
+ task_id='run_test_cases',
+bash_command='/usr/local/bin/dbt run --model tag:"TEST" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/dbt-code/.dbt/ --profile Netflix --target prod',
+ dag=dag
+)
+
 start_task = DummyOperator(task_id='start_task', dag=dag)
 end_task = DummyOperator(task_id='end_task', dag=dag)
 
-start_task >> credits_sensor >> titles_sensor >> load_data_snowflake  >> run_stage_model >> run_fact_dim_models >> end_task
+start_task >> credits_sensor >> titles_sensor >> load_data_snowflake  >> run_stage_model >> run_fact_dim_models >> run_test_cases >> end_task
 #final check
