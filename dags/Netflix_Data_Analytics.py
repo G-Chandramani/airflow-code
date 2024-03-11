@@ -57,7 +57,13 @@ load_data_snowflake = PythonOperator(task_id='Load_Data_Snowflake'
     
 run_stage_model = BashOperator(
     task_id='run_staging_models',
-    bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/dbt-code/.dbt/ --profile Netflix --target dev',
+    bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/dbt-code/.dbt --profile Netflix --target dev',
+    dag=dag
+)
+
+run_fact_dim_models = BashOperator(
+    task_id='run_fact_dim_models',
+    bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/dbt-code/.dbt --profile Netflix --target prod',
     dag=dag
 )
 
