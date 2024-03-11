@@ -10,17 +10,17 @@ from airflow.operators.dummy import DummyOperator
 import sys
 sys.path.append('/home/airflow/airflow-code/dags')
 from source_load.data_load import run_script
-from alerting.slack_alert import task_success_slack_alert
+#from alerting.slack_alert import task_success_slack_alert
 import boto3
 
-def send_sns_message(context):
-    sns_client = boto3.client('sns',region_name='us-east-1')
+# def send_sns_message(context):
+#     sns_client = boto3.client('sns',region_name='us-east-1')
 
-    # Publish the message
-    response = sns_client.publish(
-        TopicArn='arn:aws:sns:us-east-1:143176219551:Airflow_Failure',
-        Message="Netflix_Data_Analytics DAG failed"
-    )
+#     # Publish the message
+#     response = sns_client.publish(
+#         TopicArn='arn:aws:sns:us-east-1:143176219551:Airflow_Failure',
+#         Message="Netflix_Data_Analytics DAG failed"
+#     )
 
 default_args = {
     'owner': 'airflow',
@@ -31,7 +31,7 @@ default_args = {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=1),
-    'on_failure_callback': send_sns_message
+    # 'on_failure_callback': send_sns_message
 }
 
 dag = DAG(
@@ -69,25 +69,25 @@ load_data_snowflake = PythonOperator(task_id='Load_Data_Snowflake'
 	
 run_stage_models = BashOperator(
     task_id='run_stage_models',
-    bash_command='/usr/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target dev',
+    bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"DIMENSION" --project-dir /home/airflow/dbt-code --profile Netflix --target dev',
     dag=dag
 )
 
-run_fact_dim_models = BashOperator(
-    task_id='run_fact_dim_models',
-    bash_command='/usr/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
-    dag=dag
-)
+# run_fact_dim_models = BashOperator(
+#     task_id='run_fact_dim_models',
+#     bash_command='/home/airflow/dbt-env/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code --profile Netflix --target prod',
+#     dag=dag
+# )
 
-run_test_cases = BashOperator(
-    task_id='run_test_cases',
-    bash_command='/usr/bin/dbt test --model tag:"TEST" --project-dir /home/airflow/dbt-code --profiles-dir /home/airflow/.dbt/ --profile Netflix --target prod',
-    dag=dag
-)
+# run_test_cases = BashOperator(
+#     task_id='run_test_cases',
+#     bash_command='/home/airflow/dbt-env/bin/dbt test --model tag:"TEST" --project-dir /home/airflow/dbt-code --profile Netflix --target prod',
+#     dag=dag
+# )
 
 #slack_success_alert=task_success_slack_alert(dag=dag)
 
 start_task = DummyOperator(task_id='start_task', dag=dag)
 end_task = DummyOperator(task_id='end_task', dag=dag)
 
-start_task >> credits_sensor >> titles_sensor >> load_data_snowflake >> run_stage_models>> run_fact_dim_models >> run_test_cases >> end_task
+start_task >> credits_sensor >> titles_sensor >> load_data_snowflake >> run_stage_models >>end_task
