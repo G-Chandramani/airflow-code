@@ -5,15 +5,11 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.bash_operator import BashOperator
 ##This used to load a script from a different directory
-##In our use case the script to load data into snowflake is located in a subfolder inside the dags folder
+##In our use case the script to load data into snowflake is located in a subfolder inside the dags folder----
 
 import sys
 sys.path.append('/home/airflow/airflow-code/dags')
 from source_load.data_load import run_script
-
-
-
-
 
 default_args = {
     'owner': 'airflow',
@@ -30,7 +26,7 @@ dag = DAG(
     dag_id='Netflix_Data_Analytics',
     default_args=default_args,
     description='This dag runs data analytics on top of netflix datasets',
-    schedule_interval=timedelta(day=1),
+    schedule_interval=timedelta(days=1),
 )
 
 credits_sensor = S3KeySensor(
@@ -69,3 +65,4 @@ start_task = DummyOperator(task_id='start_task', dag=dag)
 end_task = DummyOperator(task_id='end_task', dag=dag)
 
 start_task >> credits_sensor >> titles_sensor >> load_data_snowflake  >> run_stage_model >> end_task
+#final check
