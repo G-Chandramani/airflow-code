@@ -29,7 +29,7 @@ def truncate_table():
 #Module to read csv file and load data in Snowflake. Table is created dynamically
 def load_data():
    cur,conn=create_connection()
-   titles_file = r"C:/Users/gajbh/OneDrive/Desktop/dbt_Training/Netflix_Dataset/titles.csv" # <- Replace with your path.
+   titles_file = r"C:/Users/gajbh/GitHub/dbt-code/datasets/titles.csv" # <- Replace with your path.
    titles_delimiter = "," # Replace if you're using a different delimiter.
    credits_file=r"C:/Users/gajbh/GitHub/dbt-code/datasets/credits.csv"
    credits_delimiter=","
