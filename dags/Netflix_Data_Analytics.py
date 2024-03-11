@@ -66,13 +66,14 @@ run_stage_model = BashOperator(
 run_fact_dim_models = BashOperator(
         task_id='run_fact_dim_models',
   #  bash_command='/usr/local/bin/dbt run --model tag:"FACT" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/dbt-code/.dbt/ --profile Netflix --target prod',
-     bash_command='echo "Activating virtual environment" && source /home/airflow/dbt-env/bin/activate && echo "Running dbt command" && /home/airflow/dbt-env/bin/dbt run --model tag:"FACT" --project-dir /home/airflow --profile Netflix --target prod',
+    bash_command='echo "Activating virtual environment" && source /home/airflow/dbt-env/bin/activate && echo "Running dbt command" && /home/airflow/dbt-env/bin/dbt run --model tag:"FACT" --project-dir /home/airflow --profile Netflix --target prod',
     dag=dag
 )
 
 run_test_cases = BashOperator(
  task_id='run_test_cases',
-bash_command='/usr/local/bin/dbt run --model tag:"TEST" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/dbt-code/.dbt/ --profile Netflix --target prod',
+#bash_command='/usr/local/bin/dbt run --model tag:"TEST" --project-dir /home/airflow/dbt-code/ --profiles-dir /home/airflow/dbt-code/.dbt/ --profile Netflix --target prod',
+ bash_command='echo "Activating virtual environment" && source /home/airflow/dbt-env/bin/activate && echo "Running dbt command" && /home/airflow/dbt-env/bin/dbt run --model tag:"TEST" --project-dir /home/airflow --profile Netflix --target prod',
  dag=dag
 )
 
