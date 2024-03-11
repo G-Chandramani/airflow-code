@@ -13,14 +13,14 @@ from source_load.data_load import run_script
 from alerting.slack_alert import task_success_slack_alert
 import boto3
 
-def send_sns_message(context):
-    sns_client = boto3.client('sns',region_name='us-east-1')
+# def send_sns_message(context):
+#     sns_client = boto3.client('sns',region_name='us-east-1')
 
-    # Publish the message
-    response = sns_client.publish(
-        TopicArn='arn:aws:sns:us-east-1:143176219551:Airflow_Failure',
-        Message="Netflix_Data_Analytics DAG failed"
-    )
+#     # Publish the message
+#     response = sns_client.publish(
+#         TopicArn='arn:aws:sns:us-east-1:143176219551:Airflow_Failure',
+#         Message="Netflix_Data_Analytics DAG failed"
+#     )
 
 default_args = {
     'owner': 'airflow',
@@ -31,7 +31,7 @@ default_args = {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=1),
-    'on_failure_callback': send_sns_message
+ #   'on_failure_callback': send_sns_message
 }
 
 dag = DAG(
